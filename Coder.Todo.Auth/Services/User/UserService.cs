@@ -1,6 +1,4 @@
-﻿
-
-using Coder.Todo.Auth.Db;
+﻿using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Exception;
 
 namespace Coder.Todo.Auth.Services.User;
@@ -26,7 +24,7 @@ public class UserService : IUserService
         }
         catch (Exception e)
         {
-            _logger.LogError("Unable to save user to database {Message}",  e.Message);
+            _logger.LogError("Unable to save user to database: {Message}",  e.Message);
             throw new CreateUserException("Unable to save user to database.");
         }
     }
