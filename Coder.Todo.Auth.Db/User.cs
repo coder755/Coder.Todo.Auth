@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coder.Todo.Auth.Db;
@@ -10,17 +11,21 @@ public class User
     public Guid Id { get; set; }
     
     [Required]
-    public string UserName { get; set; }
-    
+    [Column(TypeName = "varchar(50)")]
+    public string UserName { get; set; } = null!;
+
     [Required]
-    public string Password { get; set; }
-    
+    [Column(TypeName = "varchar(50)")]
+    public string Password { get; set; } = null!;
+
     [Required]
-    public string Email { get; set; }
-    
+    [Column(TypeName = "varchar(50)")]
+    public string Email { get; set; } = null!;
+
     [Required]
-    public string Phone { get; set; }
-    
+    [Column(TypeName = "varchar(50)")]
+    public string Phone { get; set; } = null!;
+
     [Required]
     public DateTime CreatedDate { get; set; }
 }

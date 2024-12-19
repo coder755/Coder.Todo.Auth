@@ -18,6 +18,8 @@ public class UserService : IUserService
     {
         try
         {
+            var id = Guid.CreateVersion7();
+            user.Id = id;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;

@@ -10,11 +10,18 @@ public class AuthContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Guid binary representation
         modelBuilder
             .Entity<User>()
             .Property(e => e.Id)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
+        
+        // Auto set time createdDate with timestamp
+        modelBuilder
+            .Entity<User>()
+            .Property(e => e.CreatedDate)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
     }
     
     public DbSet<User> Users { get; set; }
