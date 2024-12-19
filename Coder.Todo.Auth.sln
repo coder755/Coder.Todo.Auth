@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth", "Coder.Todo.Auth\Coder.Todo.Auth.csproj", "{0158B4BD-24C4-4A35-9B7F-8AD10ED5D2B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth.Db", "Coder.Todo.Auth.Db\Coder.Todo.Auth.Db.csproj", "{C5B90D6D-2082-4DA8-A764-7853C5ECCCBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth.Model", "Coder.Todo.Auth.Model\Coder.Todo.Auth.Model.csproj", "{698140F9-4267-4F4E-8EA6-8418A180D759}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0158B4BD-24C4-4A35-9B7F-8AD10ED5D2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0158B4BD-24C4-4A35-9B7F-8AD10ED5D2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0158B4BD-24C4-4A35-9B7F-8AD10ED5D2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0158B4BD-24C4-4A35-9B7F-8AD10ED5D2B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5B90D6D-2082-4DA8-A764-7853C5ECCCBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5B90D6D-2082-4DA8-A764-7853C5ECCCBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5B90D6D-2082-4DA8-A764-7853C5ECCCBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5B90D6D-2082-4DA8-A764-7853C5ECCCBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{698140F9-4267-4F4E-8EA6-8418A180D759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{698140F9-4267-4F4E-8EA6-8418A180D759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{698140F9-4267-4F4E-8EA6-8418A180D759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{698140F9-4267-4F4E-8EA6-8418A180D759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
