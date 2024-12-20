@@ -3,32 +3,32 @@ namespace Coder.Todo.Auth.Model;
 
 public class User
 {
-    private Guid ExternalIdP { get; set; }
-    private string UsernameP { get; set; } = null!;
-    private string EmailP { get; set; } = null!;
-    private string PhoneP { get; set; } = null!;
+    private Guid ExternalId_ { get; set; }
+    private string Username_ { get; set; } = null!;
+    private string Email_ { get; set; } = null!;
+    private string Phone_ { get; set; } = null!;
     
     public required Guid ExternalId
     {
-        get => ExternalIdP;
-        set => ExternalIdP = value;
+        get => ExternalId_;
+        set => ExternalId_ = value;
     }
     
     public required string Username
     {
-        get => UsernameP;
-        set => UsernameP = value;
+        get => Username_;
+        set => Username_ = value;
     }
     
     public required string Email
     {
-        get => EmailP;
-        set => EmailP = value;
+        get => Email_;
+        set => Email_ = value;
     }
     
     public required string Phone
     {
-        get => PhoneP;
-        set => PhoneP = value;
+        get => Phone_;
+        set => Phone_ = value;
     }
 }

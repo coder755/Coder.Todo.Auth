@@ -3,52 +3,44 @@ using Coder.Todo.Auth.Model.Exception;
 
 namespace Coder.Todo.Auth.Services.User;
 
-public class UserService : IUserService
+public class UserService(AuthContext context, ILogger<UserService> logger) : IUserService
 {
-    private readonly AuthContext _context;
-    private readonly ILogger<UserService> _logger;
-    
-    public UserService( AuthContext context, ILogger<UserService> logger)
+    public Db.User ValidateUser(Db.User user)
     {
-        _context = context;
-        _logger = logger;
+        try
+        {
+            var formattedUserName = UserValidationUtils.ValidateUserName(user.UserName);
+            var formattedPassword = UserValidationUtils.ValidatePassword(user.Password);
+            var formattedEmail = UserValidationUtils.ValidateEmail(user.Email);
+            var formattedPhoneNumber = UserValidationUtils.ValidatePhoneNumber(user.Phone);
+            return new Db.User
+            {
+                UserName = formattedUserName,
+                Password = formattedPassword,
+                Email = formattedEmail,
+                Phone = formattedPhoneNumber
+            };
+        }
+        catch (FormatException e)
+        {
+            throw new UserValidationException(e.Message);
+        }
     }
     
     public async Task<Db.User> CreateUser(Db.User user)
     {
         try
         {
-            var id = Guid.CreateVersion7();
-            user.Id = id;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            user.Id = Guid.CreateVersion7();
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
             return user;
         }
         catch (Exception e)
         {
-            _logger.LogError("Unable to save user to database: {Message}",  e.Message);
+            logger.LogError("Unable to save user to database: {Message}",  e.Message);
             throw new CreateUserException("Unable to save user to database.");
         }
-    }
-
-    public void ValidateUserName(string username)
-    {
-        
-    }
-
-    public void ValidatePassword(string password)
-    {
-        
-    }
-
-    public void ValidateEmail(string email)
-    {
-        
-    }
-
-    public void ValidatePhoneNumber(string phone)
-    {
-        
     }
 
     public string CreateAccessToken(Db.User user)

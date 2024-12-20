@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth.Db", "Coder
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth.Model", "Coder.Todo.Auth.Model\Coder.Todo.Auth.Model.csproj", "{698140F9-4267-4F4E-8EA6-8418A180D759}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coder.Todo.Auth.Test", "Coder.Todo.Auth.Test\Coder.Todo.Auth.Test.csproj", "{25DE4135-E751-4185-9BB9-FE171EE25C22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{698140F9-4267-4F4E-8EA6-8418A180D759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{698140F9-4267-4F4E-8EA6-8418A180D759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{698140F9-4267-4F4E-8EA6-8418A180D759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25DE4135-E751-4185-9BB9-FE171EE25C22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25DE4135-E751-4185-9BB9-FE171EE25C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25DE4135-E751-4185-9BB9-FE171EE25C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25DE4135-E751-4185-9BB9-FE171EE25C22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
