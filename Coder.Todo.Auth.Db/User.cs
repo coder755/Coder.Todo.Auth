@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coder.Todo.Auth.Db;
 
-[Index(nameof(Id))]
 public class User
 {
     [Key]
@@ -12,20 +11,20 @@ public class User
     
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string UserName { get; set; } = null!;
+    public string UserName { get; init; } = null!;
 
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Password { get; set; } = null!;
+    public string Password { get; init; } = null!;
 
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Email { get; set; } = null!;
+    public string Email { get; init; } = null!;
 
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Phone { get; set; } = null!;
+    public string Phone { get; init; } = null!;
 
     [Required]
-    public DateTime CreatedDate { get; set; }
+    public DateTime CreatedDate { get; init; }
 }

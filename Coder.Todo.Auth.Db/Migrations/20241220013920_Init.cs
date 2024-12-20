@@ -36,9 +36,28 @@ namespace Coder.Todo.Auth.Db.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Id",
                 table: "Users",
-                column: "Id");
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Phone",
+                table: "Users",
+                column: "Phone",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                table: "Users",
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />

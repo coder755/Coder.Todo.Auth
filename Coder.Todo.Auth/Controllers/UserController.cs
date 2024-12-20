@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
 using Coder.Todo.Auth.Db;
-using Coder.Todo.Auth.Model.Exception;
+using Coder.Todo.Auth.Model.Exception.UserValidation;
 using Coder.Todo.Auth.Model.Request;
 using Coder.Todo.Auth.Model.Response;
 using Coder.Todo.Auth.Services.User;
@@ -38,6 +38,23 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         {
             logger.LogError(e, "Error RequestPostUser");
             return new BadRequestResult();
+        }
+        catch (UserNameAlreadyExistsException e)
+        {
+            return new BadRequestObjectResult("Username already exists");
+        }
+        catch (EmailAlreadyExistsException e)
+        {
+            return new BadRequestObjectResult("Email already exists");
+        }
+        catch (PhoneNumberAlreadyExistsException e)
+        {
+            return new BadRequestObjectResult("Phone number already exists");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error RequestPostUser");
+            throw new Exception();
         }
     }
     

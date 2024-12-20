@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coder.Todo.Auth.Db.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20241219213220_Init")]
+    [Migration("20241220013920_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -55,7 +55,21 @@ namespace Coder.Todo.Auth.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Email");
+
+                    b.HasIndex("Id")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Id");
+
+                    b.HasIndex("Phone")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Phone");
+
+                    b.HasIndex("UserName")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_UserName");
 
                     b.ToTable("Users");
                 });

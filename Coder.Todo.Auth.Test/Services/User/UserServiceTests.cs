@@ -1,5 +1,5 @@
 ﻿using Coder.Todo.Auth.Db;
-using Coder.Todo.Auth.Model.Exception;
+using Coder.Todo.Auth.Model.Exception.UserValidation;
 using Coder.Todo.Auth.Services.User;
 using Microsoft.Extensions.Logging;
 using Moq;

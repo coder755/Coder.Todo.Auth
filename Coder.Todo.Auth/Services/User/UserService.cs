@@ -1,5 +1,7 @@
 ﻿using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Exception;
+using Coder.Todo.Auth.Model.Exception.UserValidation;
+using EntityFramework.Exceptions.Common;
 
 namespace Coder.Todo.Auth.Services.User;
 
@@ -35,6 +37,20 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             context.Users.Add(user);
             await context.SaveChangesAsync();
             return user;
+        }
+        catch (UniqueConstraintException e)
+        {
+            switch (e.ConstraintName)
+            {
+                case AuthContext.UserNameIndexName:
+                    throw new UserNameAlreadyExistsException();
+                case AuthContext.EmailIndexName:
+                    throw new EmailAlreadyExistsException();
+                case AuthContext.PhoneIndexName:
+                    throw new PhoneNumberAlreadyExistsException();
+                default:
+                    throw new CreateUserException("Unable to save user to database.");
+            }
         }
         catch (Exception e)
         {

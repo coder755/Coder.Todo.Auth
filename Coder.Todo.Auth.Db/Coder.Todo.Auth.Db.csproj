@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.0-preview" />
+      <PackageReference Include="EntityFrameworkCore.Exceptions.MySQL.Pomelo" Version="8.1.3" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.2.efcore.9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>
