@@ -1,4 +1,5 @@
 ﻿using Coder.Todo.Auth.Db;
+using Coder.Todo.Auth.Model;
 using Coder.Todo.Auth.Model.Exception;
 using Coder.Todo.Auth.Model.Exception.UserValidation;
 using EntityFramework.Exceptions.Common;
@@ -7,17 +8,17 @@ namespace Coder.Todo.Auth.Services.User;
 
 public class UserService(AuthContext context, ILogger<UserService> logger) : IUserService
 {
-    public Db.User ValidateUserData(Db.User user)
+    public ValidatedUserData ValidateUserData(string username, string password, string email, string phone)
     {
         try
         {
-            var formattedUserName = UserValidationUtils.ValidateUserName(user.UserName);
-            var formattedPassword = UserValidationUtils.ValidatePassword(user.Password);
-            var formattedEmail = UserValidationUtils.ValidateEmail(user.Email);
-            var formattedPhoneNumber = UserValidationUtils.ValidatePhoneNumber(user.Phone);
-            return new Db.User
+            var formattedUserName = UserValidationUtils.ValidateUserName(username);
+            var formattedPassword = UserValidationUtils.ValidatePassword(password);
+            var formattedEmail = UserValidationUtils.ValidateEmail(email);
+            var formattedPhoneNumber = UserValidationUtils.ValidatePhoneNumber(phone);
+            return new ValidatedUserData
             {
-                UserName = formattedUserName,
+                Username = formattedUserName,
                 Password = formattedPassword,
                 Email = formattedEmail,
                 Phone = formattedPhoneNumber
@@ -29,11 +30,18 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
         }
     }
     
-    public async Task<Db.User> CreateUserAsync(Db.User user)
+    public async Task<Db.User> CreateUserAsync(ValidatedUserData validatedUserData)
     {
         try
         {
-            user.Id = Guid.CreateVersion7();
+            var user = new Db.User
+            {
+                Id = Guid.CreateVersion7(),
+                UserName = validatedUserData.Username,
+                Password = validatedUserData.Password,
+                Email = validatedUserData.Email,
+                Phone = validatedUserData.Phone
+            };
             context.Users.Add(user);
             await context.SaveChangesAsync();
             return user;

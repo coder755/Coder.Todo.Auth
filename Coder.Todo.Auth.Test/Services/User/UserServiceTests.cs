@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Coder.Todo.Auth.Db;
+using Coder.Todo.Auth.Model;
 using Coder.Todo.Auth.Model.Exception;
 using Coder.Todo.Auth.Model.Exception.UserValidation;
 using Coder.Todo.Auth.Services.User;
@@ -30,16 +31,9 @@ public class UserServiceTests
     [Test]
     public void ValidateUser_GoodData_DoesNotThrow()
     {
-        var goodData = new Db.User
-        {
-            UserName = "bestUserName",
-            Password = "bestPassword1",
-            Email = "best@Email",
-            Phone = "2234567890",
-        };
         try
         {
-            _userService.ValidateUserData(goodData);
+            _userService.ValidateUserData("bestUserName", "bestPassword1", "best@Email", "2234567890");
         }
         catch (Exception e)
         {
@@ -50,9 +44,8 @@ public class UserServiceTests
     [Test]
     public void ValidateUser_BadData_ThrowsUserValidationException()
     {
-        var badUserData = new Db.User { UserName = "" };
         Assert.Throws<UserDataValidationException>(
-            () => _userService.ValidateUserData(badUserData));
+            () => _userService.ValidateUserData("", "", "", ""));
     }
     
     [Test]
@@ -63,7 +56,13 @@ public class UserServiceTests
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
         Assert.ThrowsAsync<UserNameAlreadyExistsException>(
-            () => _userService.CreateUserAsync(new Db.User()));
+            () => _userService.CreateUserAsync(new ValidatedUserData
+            {
+                Username = "best",
+                Password = "user",
+                Email = "ever",
+                Phone = "123"
+            }));
     }
     
     [Test]
@@ -74,7 +73,13 @@ public class UserServiceTests
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
         Assert.ThrowsAsync<EmailAlreadyExistsException>(
-            () => _userService.CreateUserAsync(new Db.User()));
+            () => _userService.CreateUserAsync(new ValidatedUserData
+            {
+                Username = "best",
+                Password = "user",
+                Email = "ever",
+                Phone = "123"
+            }));
     }
     
     [Test]
@@ -85,7 +90,13 @@ public class UserServiceTests
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
         Assert.ThrowsAsync<PhoneNumberAlreadyExistsException>(
-            () => _userService.CreateUserAsync(new Db.User()));
+            () => _userService.CreateUserAsync(new ValidatedUserData
+            {
+                Username = "best",
+                Password = "user",
+                Email = "ever",
+                Phone = "123"
+            }));
     }
     
     [Test]
@@ -96,7 +107,13 @@ public class UserServiceTests
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
         Assert.ThrowsAsync<CreateUserException>(
-            () => _userService.CreateUserAsync(new Db.User()));
+            () => _userService.CreateUserAsync(new ValidatedUserData
+            {
+                Username = "best",
+                Password = "user",
+                Email = "ever",
+                Phone = "123"
+            }));
     }
 
     private static UniqueConstraintException GetUniqueConstraintException(string constraintName)

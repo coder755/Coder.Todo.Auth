@@ -17,17 +17,10 @@ public class UserController(IUserService userService, ILogger<UserController> lo
     [HttpPost]
     public async Task<ActionResult<PostUserResponse>> PostUserAsync([FromBody] PostUserRequest req)
     {
-        var userToPost = new User()
-        {
-            UserName = req.Username,
-            Password = req.Password,
-            Email = req.Email,
-            Phone = req.Phone
-        };
         try
         {
-            var validatedUser = userService.ValidateUserData(userToPost);
-            var user = await userService.CreateUserAsync(validatedUser);
+            var validatedUserData = userService.ValidateUserData(req.Username, req.Password, req.Email, req.Phone);
+            var user = await userService.CreateUserAsync(validatedUserData);
             var accessToken = userService.CreateAccessToken(user);
             return new PostUserResponse
             {

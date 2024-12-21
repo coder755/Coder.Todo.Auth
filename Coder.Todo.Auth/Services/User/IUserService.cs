@@ -1,8 +1,10 @@
-﻿namespace Coder.Todo.Auth.Services.User;
+﻿using Coder.Todo.Auth.Model;
+
+namespace Coder.Todo.Auth.Services.User;
 
 public interface IUserService
 {
-    Db.User ValidateUserData(Db.User user);
-    Task<Db.User> CreateUserAsync(Db.User user);
+    ValidatedUserData ValidateUserData(string username, string password, string email, string phone);
+    Task<Db.User> CreateUserAsync(ValidatedUserData validatedUserData);
     string CreateAccessToken(Db.User user);
 }
