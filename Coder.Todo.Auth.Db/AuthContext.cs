@@ -5,7 +5,7 @@ namespace Coder.Todo.Auth.Db;
 
 public class AuthContext : DbContext
 {
-    private const string IdIndexName = "IX_Users_Id";
+    public const string IdIndexName = "IX_Users_Id";
     public const string UserNameIndexName = "IX_Users_UserName";
     public const string PhoneIndexName = "IX_Users_Phone";
     public const string EmailIndexName = "IX_Users_Email";
@@ -45,5 +45,5 @@ public class AuthContext : DbContext
         optionsBuilder.UseExceptionProcessor();
     }
     
-    public DbSet<User> Users { get; set; }
+    public virtual DbSet<User> Users { get; set; }
 }

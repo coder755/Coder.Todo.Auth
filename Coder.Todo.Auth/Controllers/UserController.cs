@@ -15,7 +15,7 @@ namespace Coder.Todo.Auth.Controllers;
 public class UserController(IUserService userService, ILogger<UserController> logger)
 {
     [HttpPost]
-    public async Task<ActionResult<PostUserResponse>> RequestPostUser([FromBody] PostUserRequest req)
+    public async Task<ActionResult<PostUserResponse>> PostUserAsync([FromBody] PostUserRequest req)
     {
         var userToPost = new User()
         {
@@ -26,28 +26,28 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         };
         try
         {
-            var validatedUser = userService.ValidateUser(userToPost);
-            var user = await userService.CreateUser(validatedUser);
+            var validatedUser = userService.ValidateUserData(userToPost);
+            var user = await userService.CreateUserAsync(validatedUser);
             var accessToken = userService.CreateAccessToken(user);
             return new PostUserResponse
             {
                 AccessToken = accessToken
             };
         }
-        catch (UserValidationException e)
+        catch (UserDataValidationException e)
         {
             logger.LogError(e, "Error RequestPostUser");
             return new BadRequestResult();
         }
-        catch (UserNameAlreadyExistsException e)
+        catch (UserNameAlreadyExistsException)
         {
             return new BadRequestObjectResult("Username already exists");
         }
-        catch (EmailAlreadyExistsException e)
+        catch (EmailAlreadyExistsException)
         {
             return new BadRequestObjectResult("Email already exists");
         }
-        catch (PhoneNumberAlreadyExistsException e)
+        catch (PhoneNumberAlreadyExistsException)
         {
             return new BadRequestObjectResult("Phone number already exists");
         }

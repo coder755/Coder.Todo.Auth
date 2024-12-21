@@ -2,7 +2,7 @@
 
 public interface IUserService
 {
-    Db.User ValidateUser(Db.User user);
-    Task<Db.User> CreateUser(Db.User user);
+    Db.User ValidateUserData(Db.User user);
+    Task<Db.User> CreateUserAsync(Db.User user);
     string CreateAccessToken(Db.User user);
 }

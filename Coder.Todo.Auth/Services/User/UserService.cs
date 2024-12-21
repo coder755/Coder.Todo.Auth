@@ -7,7 +7,7 @@ namespace Coder.Todo.Auth.Services.User;
 
 public class UserService(AuthContext context, ILogger<UserService> logger) : IUserService
 {
-    public Db.User ValidateUser(Db.User user)
+    public Db.User ValidateUserData(Db.User user)
     {
         try
         {
@@ -25,11 +25,11 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
         }
         catch (FormatException e)
         {
-            throw new UserValidationException(e.Message);
+            throw new UserDataValidationException(e.Message);
         }
     }
     
-    public async Task<Db.User> CreateUser(Db.User user)
+    public async Task<Db.User> CreateUserAsync(Db.User user)
     {
         try
         {
