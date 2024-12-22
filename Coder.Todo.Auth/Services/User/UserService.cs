@@ -52,9 +52,9 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             {
                 case AuthContext.UserNameIndexName:
                     throw new UserNameAlreadyExistsException();
-                case AuthContext.EmailIndexName:
+                case AuthContext.UserEmailIndexName:
                     throw new EmailAlreadyExistsException();
-                case AuthContext.PhoneIndexName:
+                case AuthContext.UserPhoneIndexName:
                     throw new PhoneNumberAlreadyExistsException();
                 default:
                     throw new CreateUserException("Unable to save user to database.");
@@ -67,7 +67,7 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
         }
     }
 
-    public string CreateAccessToken(Db.User user)
+    public string CreateAccessToken(Guid userId)
     {
         return "";
     }

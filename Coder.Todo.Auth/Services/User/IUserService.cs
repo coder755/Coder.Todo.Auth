@@ -6,5 +6,5 @@ public interface IUserService
 {
     ValidatedUserData ValidateUserData(string username, string password, string email, string phone);
     Task<Db.User> CreateUserAsync(ValidatedUserData validatedUserData);
-    string CreateAccessToken(Db.User user);
+    string CreateAccessToken(Guid userId);
 }

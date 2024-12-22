@@ -68,7 +68,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingEmail_ThrowsEmailAlreadyExistsException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.EmailIndexName);
+        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserEmailIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -85,7 +85,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingPhone_ThrowsPhoneNumberAlreadyExistsException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.PhoneIndexName);
+        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserPhoneIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -102,7 +102,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingId_ThrowsCreateUserExceptionException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.IdIndexName);
+        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserIdIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);

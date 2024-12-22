@@ -21,7 +21,7 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         {
             var validatedUserData = userService.ValidateUserData(req.Username, req.Password, req.Email, req.Phone);
             var user = await userService.CreateUserAsync(validatedUserData);
-            var accessToken = userService.CreateAccessToken(user);
+            var accessToken = userService.CreateAccessToken(user.Id);
             return new PostUserResponse
             {
                 AccessToken = accessToken
@@ -29,8 +29,7 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         }
         catch (UserDataValidationException e)
         {
-            logger.LogError(e, "Error RequestPostUser");
-            return new BadRequestResult();
+            return new BadRequestObjectResult(e.Message);
         }
         catch (UserNameAlreadyExistsException)
         {
@@ -46,7 +45,7 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error RequestPostUser");
+            logger.LogError(e, "Error PostUserAsync");
             throw new Exception();
         }
     }

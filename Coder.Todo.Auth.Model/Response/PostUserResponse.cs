@@ -3,11 +3,11 @@ namespace Coder.Todo.Auth.Model.Response;
 
 public class PostUserResponse
 {
-    private string AccessTokenP { get; set; } = null!;
+    private string AccessToken_ { get; set; } = null!;
 
     public required string AccessToken
     {
-        get => AccessTokenP;
-        set => AccessTokenP = value;
+        get => AccessToken_;
+        set => AccessToken_ = value;
     }
 }
