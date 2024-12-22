@@ -14,6 +14,10 @@ public class AuthContext : DbContext
     // Role Indices
     private const string RoleIdIndexName = "IX_Roles_Id";
     public const string RoleNameIndexName = "IX_Roles_Name";
+    
+    // Permission Indices
+    private const string PermissionIdIndexName = "IX_Permissions_Id";
+    public const string PermissionNameIndexName = "IX_Permissions_Name";
     public AuthContext()
     {
     }
@@ -34,6 +38,10 @@ public class AuthContext : DbContext
         // Roles Table
         modelBuilder.Entity<Role>().HasIndex(u => u.Id).HasDatabaseName(RoleIdIndexName).IsUnique();
         modelBuilder.Entity<Role>().HasIndex(u => u.Name).HasDatabaseName(RoleNameIndexName).IsUnique();
+        
+        // Permissions Table
+        modelBuilder.Entity<Permission>().HasIndex(u => u.Id).HasDatabaseName(PermissionIdIndexName).IsUnique();
+        modelBuilder.Entity<Permission>().HasIndex(u => u.Name).HasDatabaseName(PermissionNameIndexName).IsUnique();
 
         // Guid binary representation
         modelBuilder
@@ -54,6 +62,13 @@ public class AuthContext : DbContext
             .Property(e => e.Id)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
+        
+        // Guid binary representation
+        modelBuilder
+            .Entity<Permission>()
+            .Property(e => e.Id)
+            .HasConversion<byte[]>()
+            .HasMaxLength(16);
     }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -63,4 +78,5 @@ public class AuthContext : DbContext
     
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<Permission> Permissions { get; set; }
 }

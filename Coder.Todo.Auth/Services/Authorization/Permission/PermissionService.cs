@@ -2,38 +2,37 @@
 using Coder.Todo.Auth.Model.Exception.RoleCreation;
 using EntityFramework.Exceptions.Common;
 
-namespace Coder.Todo.Auth.Services.Authorization;
+namespace Coder.Todo.Auth.Services.Authorization.Permission;
 
-public class RoleService(AuthContext context, ILogger<RoleService> logger) : IRoleService
+public class PermissionService(AuthContext context, ILogger<PermissionService> logger) : IPermissionService
 {
-    public async Task<Role> CreateRoleAsync(string roleName, string description)
+    public async Task<Db.Permission> CreatePermissionAsync(string permissionName, string description)
     {
         try
         {
-            var role = new Role
+            var permission = new Db.Permission
             {
                 Id = Guid.CreateVersion7(),
-                Name = roleName,
+                Name = permissionName,
                 Description = description
             };
-            context.Roles.Add(role);
+            context.Permissions.Add(permission);
             await context.SaveChangesAsync();
-            return role;
+            return permission;
         }
         catch (UniqueConstraintException e)
         {
             switch (e.ConstraintName)
             {
                 case AuthContext.RoleNameIndexName:
-                    throw new RoleNameAlreadyExistsException($"Role {roleName} already exists");
+                    throw new RoleNameAlreadyExistsException($"Permission {permissionName} already exists");
                 default:
-                    logger.LogError(e, "Error creating role");
                     throw;
             }
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error creating role");
+            logger.LogError(e, "Error creating permission");
             throw;
         }
     }

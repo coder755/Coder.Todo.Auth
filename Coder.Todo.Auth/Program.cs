@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Coder.Todo.Auth.Db;
-using Coder.Todo.Auth.Services.Authorization;
+using Coder.Todo.Auth.Services.Authorization.Permission;
+using Coder.Todo.Auth.Services.Authorization.Role;
 using Coder.Todo.Auth.Services.User;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -26,6 +27,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
 });
 
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
