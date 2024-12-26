@@ -1,4 +1,6 @@
 ﻿using System.Net.Mime;
+using Coder.Todo.Auth.Model.Exception.GrantedPermission;
+using Coder.Todo.Auth.Model.Exception.Permission;
 using Coder.Todo.Auth.Model.Exception.Role;
 using Coder.Todo.Auth.Model.Request;
 using Coder.Todo.Auth.Model.Response;
@@ -40,7 +42,7 @@ public class AdminController(
         catch (Exception e)
         {
             logger.LogError(e, "Error PostRoleAsync");
-            throw new Exception();
+            return new BadRequestObjectResult("Error Posting Role");
         }
     }
     
@@ -66,8 +68,8 @@ public class AdminController(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error PostRoleAsync");
-            throw new Exception();
+            logger.LogError(e, "Error PostPermissionAsync");
+            return new BadRequestObjectResult("Error Posting Permission");
         }
     }
 
@@ -79,10 +81,22 @@ public class AdminController(
             await roleService.GrantPermission(req.RoleId, req.PermissionId);
             return new OkResult();
         }
+        catch (RoleDoesNotExistsException e)
+        {
+            return new BadRequestObjectResult("Role does not exist");
+        }
+        catch (PermissionDoesNotExistsException e)
+        {
+            return new BadRequestObjectResult("Permission does not exist");
+        }
+        catch (GrantedPermissionExistsException e)
+        {
+            return new BadRequestObjectResult("Granted permission already exists");
+        }
         catch (Exception e)
         {
             logger.LogError(e, "Error GrantPermissionAsync");
-            throw new Exception();
+            return new BadRequestObjectResult("Error Granting Permission");
         }
     }
 }

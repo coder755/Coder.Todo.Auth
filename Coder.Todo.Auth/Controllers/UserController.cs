@@ -46,7 +46,7 @@ public class UserController(IUserService userService, ILogger<UserController> lo
         catch (Exception e)
         {
             logger.LogError(e, "Error PostUserAsync");
-            throw new Exception();
+            return new BadRequestObjectResult("Error Posting User");
         }
     }
     
