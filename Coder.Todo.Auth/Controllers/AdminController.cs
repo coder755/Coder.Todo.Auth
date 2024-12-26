@@ -1,5 +1,5 @@
 ﻿using System.Net.Mime;
-using Coder.Todo.Auth.Model.Exception.RoleCreation;
+using Coder.Todo.Auth.Model.Exception.Role;
 using Coder.Todo.Auth.Model.Request;
 using Coder.Todo.Auth.Model.Response;
 using Coder.Todo.Auth.Services.Authorization.Permission;
@@ -17,7 +17,7 @@ public class AdminController(
     IPermissionService permissionService, 
     ILogger<AdminController> logger)
 {
-    [HttpPost]
+    [HttpPost("role")]
     public async Task<ActionResult<PostRoleResponse>> PostRoleAsync([FromBody] PostRoleRequest req)
     {
         try
@@ -44,7 +44,7 @@ public class AdminController(
         }
     }
     
-    [HttpPost]
+    [HttpPost("permission")]
     public async Task<ActionResult<PostPermissionResponse>> PostPermissionAsync([FromBody] PostPermissionRequest req)
     {
         try
@@ -67,6 +67,20 @@ public class AdminController(
         catch (Exception e)
         {
             logger.LogError(e, "Error PostRoleAsync");
+            throw new Exception();
+        }
+    }
+
+    [HttpPost("permission/grant")]
+    public async Task<ActionResult> GrantPermissionAsync([FromBody] GrantPermissionRequest req)
+    {
+        try
+        {
+            await roleService.GrantPermission(req.RoleId, req.PermissionId);
+            return new OkResult();
+        }
+        catch (Exception e)
+        {
             throw new Exception();
         }
     }

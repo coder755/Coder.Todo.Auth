@@ -22,6 +22,21 @@ namespace Coder.Todo.Auth.Db.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Coder.Todo.Auth.Db.GrantedPermission", b =>
+                {
+                    b.Property<byte[]>("RoleId")
+                        .HasMaxLength(16)
+                        .HasColumnType("varbinary(16)");
+
+                    b.Property<byte[]>("PermissionId")
+                        .HasMaxLength(16)
+                        .HasColumnType("varbinary(16)");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.ToTable("GrantedPermissions");
+                });
+
             modelBuilder.Entity("Coder.Todo.Auth.Db.Permission", b =>
                 {
                     b.Property<byte[]>("Id")
@@ -38,10 +53,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Permissions_Id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -66,10 +77,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Roles_Id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -111,10 +118,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasDatabaseName("IX_Users_Email");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Users_Id");
 
                     b.HasIndex("Phone")
                         .IsUnique()

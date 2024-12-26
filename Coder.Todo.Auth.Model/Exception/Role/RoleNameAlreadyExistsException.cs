@@ -1,4 +1,4 @@
-﻿namespace Coder.Todo.Auth.Model.Exception.RoleCreation;
+﻿namespace Coder.Todo.Auth.Model.Exception.Role;
 
 public class RoleNameAlreadyExistsException : System.Exception
 {

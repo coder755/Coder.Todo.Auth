@@ -6,18 +6,17 @@ namespace Coder.Todo.Auth.Db;
 public class AuthContext : DbContext
 {
     // User Indices
-    public const string UserIdIndexName = "IX_Users_Id";
+    public const string UserIdIndexName = "PRIMARY";
     public const string UserNameIndexName = "IX_Users_UserName";
     public const string UserPhoneIndexName = "IX_Users_Phone";
     public const string UserEmailIndexName = "IX_Users_Email";
     
     // Role Indices
-    private const string RoleIdIndexName = "IX_Roles_Id";
     public const string RoleNameIndexName = "IX_Roles_Name";
     
     // Permission Indices
-    private const string PermissionIdIndexName = "IX_Permissions_Id";
     public const string PermissionNameIndexName = "IX_Permissions_Name";
+
     public AuthContext()
     {
     }
@@ -30,17 +29,17 @@ public class AuthContext : DbContext
     {
         // Indices built here to take advantage of UniqueConstraintException
         // Users Table
-        modelBuilder.Entity<User>().HasIndex(u => u.Id).HasDatabaseName(UserIdIndexName).IsUnique();
+        modelBuilder.Entity<User>().HasKey(u => u.Id);
         modelBuilder.Entity<User>().HasIndex(u => u.UserName).HasDatabaseName(UserNameIndexName).IsUnique();
         modelBuilder.Entity<User>().HasIndex(u => u.Email).HasDatabaseName(UserEmailIndexName).IsUnique();
         modelBuilder.Entity<User>().HasIndex(u => u.Phone).HasDatabaseName(UserPhoneIndexName).IsUnique();
 
         // Roles Table
-        modelBuilder.Entity<Role>().HasIndex(u => u.Id).HasDatabaseName(RoleIdIndexName).IsUnique();
+        modelBuilder.Entity<Role>().HasKey(u => u.Id);
         modelBuilder.Entity<Role>().HasIndex(u => u.Name).HasDatabaseName(RoleNameIndexName).IsUnique();
         
         // Permissions Table
-        modelBuilder.Entity<Permission>().HasIndex(u => u.Id).HasDatabaseName(PermissionIdIndexName).IsUnique();
+        modelBuilder.Entity<Permission>().HasKey(u => u.Id);
         modelBuilder.Entity<Permission>().HasIndex(u => u.Name).HasDatabaseName(PermissionNameIndexName).IsUnique();
 
         // Guid binary representation
@@ -56,17 +55,29 @@ public class AuthContext : DbContext
             .Property(e => e.CreatedDate)
             .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
         
-        // Guid binary representation
+        // Guid binary representation for Roles
         modelBuilder
             .Entity<Role>()
             .Property(e => e.Id)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
         
-        // Guid binary representation
+        // Guid binary representation for Permissions
         modelBuilder
             .Entity<Permission>()
             .Property(e => e.Id)
+            .HasConversion<byte[]>()
+            .HasMaxLength(16);
+        
+        // Guid binary representation for GrantedPermissions
+        modelBuilder
+            .Entity<GrantedPermission>()
+            .Property(e => e.PermissionId)
+            .HasConversion<byte[]>()
+            .HasMaxLength(16);
+        modelBuilder
+            .Entity<GrantedPermission>()
+            .Property(e => e.RoleId)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
     }
@@ -79,4 +90,5 @@ public class AuthContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
+    public virtual DbSet<GrantedPermission> GrantedPermissions { get; set; }
 }

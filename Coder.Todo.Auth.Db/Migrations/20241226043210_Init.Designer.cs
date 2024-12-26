@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coder.Todo.Auth.Db.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20241222003441_PermissionsInit")]
-    partial class PermissionsInit
+    [Migration("20241226043210_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Coder.Todo.Auth.Db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Coder.Todo.Auth.Db.GrantedPermission", b =>
+                {
+                    b.Property<byte[]>("RoleId")
+                        .HasMaxLength(16)
+                        .HasColumnType("varbinary(16)");
+
+                    b.Property<byte[]>("PermissionId")
+                        .HasMaxLength(16)
+                        .HasColumnType("varbinary(16)");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.ToTable("GrantedPermissions");
+                });
 
             modelBuilder.Entity("Coder.Todo.Auth.Db.Permission", b =>
                 {
@@ -41,10 +56,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Permissions_Id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -69,10 +80,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Roles_Id");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -114,10 +121,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasDatabaseName("IX_Users_Email");
-
-                    b.HasIndex("Id")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Users_Id");
 
                     b.HasIndex("Phone")
                         .IsUnique()
