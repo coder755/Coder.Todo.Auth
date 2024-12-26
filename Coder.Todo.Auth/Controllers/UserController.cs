@@ -1,5 +1,4 @@
 ﻿using System.Net.Mime;
-using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Exception.UserValidation;
 using Coder.Todo.Auth.Model.Request;
 using Coder.Todo.Auth.Model.Response;
