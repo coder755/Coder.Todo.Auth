@@ -81,6 +81,7 @@ public class AdminController(
         }
         catch (Exception e)
         {
+            logger.LogError(e, "Error GrantPermissionAsync");
             throw new Exception();
         }
     }
