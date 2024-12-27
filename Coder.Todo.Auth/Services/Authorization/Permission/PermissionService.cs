@@ -1,4 +1,4 @@
-﻿using Coder.Todo.Auth.Db;
+using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Exception.Permission;
 using EntityFramework.Exceptions.Common;
 

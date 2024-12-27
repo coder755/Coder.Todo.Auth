@@ -1,4 +1,4 @@
-﻿using Coder.Todo.Auth.Db;
+using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model;
 using Coder.Todo.Auth.Model.Exception;
 using Coder.Todo.Auth.Model.Exception.UserValidation;
