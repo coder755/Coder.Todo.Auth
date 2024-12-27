@@ -113,6 +113,4 @@ public class UserServiceTests
                 Phone = "123"
             }));
     }
-
-
 }
