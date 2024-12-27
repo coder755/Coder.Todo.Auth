@@ -1,5 +1,5 @@
 ﻿using Coder.Todo.Auth.Db;
-using Coder.Todo.Auth.Model.Exception.Role;
+using Coder.Todo.Auth.Model.Exception.Permission;
 using EntityFramework.Exceptions.Common;
 
 namespace Coder.Todo.Auth.Services.Authorization.Permission;
@@ -25,7 +25,7 @@ public class PermissionService(AuthContext context, ILogger<PermissionService> l
             switch (e.ConstraintName)
             {
                 case AuthContext.PermissionNameIndexName:
-                    throw new RoleNameAlreadyExistsException($"Permission {permissionName} already exists");
+                    throw new PermissionNameAlreadyExistsException($"Permission {permissionName} already exists");
                 default:
                     throw;
             }
