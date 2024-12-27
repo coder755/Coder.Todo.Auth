@@ -1,0 +1,13 @@
+{
+  "name": "coder.todo.auth.keys",
+  "version": "1.0.0",
+  "description": "Package for private, public and jwks generation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Coder",
+  "dependencies": {
+    "eckles": "^1.4.1"
+  }
+}
