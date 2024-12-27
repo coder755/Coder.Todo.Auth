@@ -1,10 +1,8 @@
-﻿using System.Reflection;
-using Coder.Todo.Auth.Db;
+﻿using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model;
 using Coder.Todo.Auth.Model.Exception;
 using Coder.Todo.Auth.Model.Exception.UserValidation;
 using Coder.Todo.Auth.Services.User;
-using EntityFramework.Exceptions.Common;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -51,7 +49,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingUsername_ThrowsUserNameAlreadyExistsException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserNameIndexName);
+        var uniqueConstraintException = ServiceTestUtils.GetUniqueConstraintException(AuthContext.UserNameIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -68,7 +66,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingEmail_ThrowsEmailAlreadyExistsException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserEmailIndexName);
+        var uniqueConstraintException = ServiceTestUtils.GetUniqueConstraintException(AuthContext.UserEmailIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -85,7 +83,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingPhone_ThrowsPhoneNumberAlreadyExistsException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserPhoneIndexName);
+        var uniqueConstraintException = ServiceTestUtils.GetUniqueConstraintException(AuthContext.UserPhoneIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -102,7 +100,7 @@ public class UserServiceTests
     [Test]
     public void CreateUserAsync_ExistingId_ThrowsCreateUserExceptionException()
     {
-        var uniqueConstraintException = GetUniqueConstraintException(AuthContext.UserIdIndexName);
+        var uniqueConstraintException = ServiceTestUtils.GetUniqueConstraintException(AuthContext.UserIdIndexName);
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
             .Throws(uniqueConstraintException);
@@ -116,12 +114,5 @@ public class UserServiceTests
             }));
     }
 
-    private static UniqueConstraintException GetUniqueConstraintException(string constraintName)
-    {
-        var uniqueConstraintException = new UniqueConstraintException();
-        var t = uniqueConstraintException.GetType();
-        const BindingFlags invokeAtt = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance;
-        t.InvokeMember("ConstraintName", invokeAtt, null, uniqueConstraintException, [constraintName]);
-        return uniqueConstraintException;
-    }
+
 }
