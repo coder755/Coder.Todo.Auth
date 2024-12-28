@@ -81,15 +81,15 @@ public class AdminController(
             await roleService.GrantPermission(req.RoleId, req.PermissionId);
             return new OkResult();
         }
-        catch (RoleDoesNotExistsException e)
+        catch (RoleDoesNotExistsException)
         {
             return new BadRequestObjectResult("Role does not exist");
         }
-        catch (PermissionDoesNotExistsException e)
+        catch (PermissionDoesNotExistsException)
         {
             return new BadRequestObjectResult("Permission does not exist");
         }
-        catch (GrantedPermissionExistsException e)
+        catch (GrantedPermissionExistsException)
         {
             return new BadRequestObjectResult("Granted permission already exists");
         }

@@ -64,7 +64,7 @@ public class RoleService(AuthContext context, ILogger<RoleService> logger) : IRo
             await context.SaveChangesAsync();
             return grantedPermission;
         }
-        catch (UniqueConstraintException e)
+        catch (UniqueConstraintException)
         {
             throw new GrantedPermissionExistsException();
         }
