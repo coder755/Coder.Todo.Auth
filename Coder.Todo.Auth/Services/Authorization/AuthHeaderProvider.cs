@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Coder.Todo.Auth.Services.Authorization;
 
-public class AuthHeaderProvider(IHttpContextAccessor httpContextAccessor, IJwtService jwtService) : ControllerBase, IAuthHeaderProvider
+public class AuthHeaderProvider(
+    IHttpContextAccessor httpContextAccessor,
+    IJwtService jwtService) : ControllerBase,
+    IAuthHeaderProvider
 {
     public Guid GetUserIdFromToken()
     {

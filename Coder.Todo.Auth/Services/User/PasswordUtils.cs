@@ -8,7 +8,11 @@ public static class PasswordUtils
 {
     private const int PasswordHashSize = 32;
     private const int SaltSize = 16;
-    public static byte[] HashPassword(string password, byte[] salt, int memoryCost = 65536, int iterations = 4, int degreeOfParallelism = 2)
+    public static byte[] HashPassword(string password,
+        byte[] salt,
+        int memoryCost = 65536,
+        int iterations = 4,
+        int degreeOfParallelism = 2)
     {
         using var hasher = new Argon2id(Encoding.UTF8.GetBytes(password));
         hasher.Salt = salt;
@@ -20,7 +24,12 @@ public static class PasswordUtils
         return hashBytes;
     }
 
-    public static bool VerifyPassword(string password, byte [] hashedPassword, byte[] salt, int memoryCost = 65536, int iterations = 4, int degreeOfParallelism = 2)
+    public static bool VerifyPassword(string password,
+        byte[] hashedPassword,
+        byte[] salt,
+        int memoryCost = 65536,
+        int iterations = 4,
+        int degreeOfParallelism = 2)
     {
         var newHash = HashPassword(password, salt, memoryCost, iterations, degreeOfParallelism);
         return newHash.SequenceEqual(hashedPassword);
