@@ -6,7 +6,7 @@ namespace Coder.Todo.Auth.Services.User;
 
 public static class UserValidationUtils
 {
-    private static readonly FieldValidationParams UserNameValidationParams = new FieldValidationParams
+    private static readonly FieldValidationParams UserNameValidationParams = new()
     {
         Max = 50,
         Min = 8,
@@ -14,7 +14,7 @@ public static class UserValidationUtils
         Message = "Username must only contain alphanumeric characters and underscores.",
     };
     
-    private static readonly FieldValidationParams PasswordValidationParams = new FieldValidationParams
+    private static readonly FieldValidationParams PasswordValidationParams = new()
     {
         Max = 50,
         Min = 8,
@@ -22,7 +22,7 @@ public static class UserValidationUtils
         Message = "Password must have at least one letter and one number",
     };
     
-    private static readonly FieldValidationParams EmailValidationParams = new FieldValidationParams
+    private static readonly FieldValidationParams EmailValidationParams = new()
     {
         Max = 50,
         Min = 8,
@@ -77,36 +77,24 @@ public static class UserValidationUtils
     
     private class FieldValidationParams
     {
-        private int Max_ { get; set; }
-        private int Min_ { get; set; }
         private string Pattern_ { get; init; } = null!;
         private string Message_ { get; init; } = null!;
-
-        public required int Max
-        {
-            set => Max_ = value;
-        }
-        
-        public required int Min
-        {
-            set => Min_ = value;
-        }
-        
+        public required int Max { get; init; }
+        public required int Min { get; init; }
         public required string Pattern
         {
             get
             {
-                var lengthRegEx = "^(?=.{" + Min_ + "," + Max_ + "}$)";
+                var lengthRegEx = "^(?=.{" + Min + "," + Max + "}$)";
                 return lengthRegEx + Pattern_;
             }
             init => Pattern_ = value;
         }
-        
         public required string Message
         {
             get
             {
-                var postMessage = " It must be between " + Min_ + " and " + Max_ + " characters.";
+                var postMessage = " It must be between " + Min + " and " + Max + " characters.";
                 return Message_ + postMessage;
             }
             init => Message_ = value;
