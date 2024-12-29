@@ -1,34 +1,34 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace Coder.Todo.Auth.Db;
 
 public class User
 {
     [Key]
-    public Guid Id { get; set; }
+    public required Guid Id { get; init; }
     
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string UserName { get; init; } = null!;
+    public required string UserName { get; init; }
 
     [Required]
     [Column(TypeName = "binary(32)")]
-    public byte[] PasswordHash { get; init; } = null!;
+    public required byte[] PasswordHash { get; init; }
     
     [Required]
     [Column(TypeName = "binary(16)")]
-    public byte[] Salt { get; init; } = null!;
+    public required byte[] Salt { get; init; }
 
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Email { get; init; } = null!;
+    public required string Email { get; init; }
 
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Phone { get; init; } = null!;
+    public required string Phone { get; init; }
 
     [Required]
+    // Gets set by Db in AuthContext in OnModelCreating
     public DateTime CreatedDate { get; init; }
 }

@@ -10,9 +10,9 @@ public class Role
     
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Name { get; init; } = null!;
+    public required string Name { get; init; }
     
     [Required]
     [Column(TypeName = "varchar(50)")]
-    public string Description { get; init; } = null!;
+    public required string Description { get; init; }
 }

@@ -69,9 +69,14 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             throw new CreateUserException("Unable to save user to database.");
         }
     }
-    
-    public string CreateAccessToken(Guid userId)
+
+    public async Task<Db.User> GetUserAsync(Guid userId)
     {
-        return "";
+        var user = await context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        return user;
     }
 }

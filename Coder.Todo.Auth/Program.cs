@@ -1,8 +1,12 @@
 using System.Text.Json.Serialization;
 using Coder.Todo.Auth.Db;
+using Coder.Todo.Auth.Model.Auth;
+using Coder.Todo.Auth.Services.Authorization;
+using Coder.Todo.Auth.Services.Authorization.Jwt;
 using Coder.Todo.Auth.Services.Authorization.Permission;
 using Coder.Todo.Auth.Services.Authorization.Role;
 using Coder.Todo.Auth.Services.User;
+using Coder.Todo.Auth.Util;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -13,22 +17,33 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 // Add services to the container
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddAuthSwaggerGen();
 builder.Services.AddHealthChecks();
 
-var connectionString = GetConnectionString(builder.Configuration);
 
 builder.Services.AddDbContext<AuthContext>(options =>
 {
+    var connectionString = ProgramSetupHelpers.GetConnectionString(builder.Configuration);
     var serverVersion = new MySqlServerVersion("8.0");
     options.UseMySql(connectionString, serverVersion);
 });
 
+builder.Services.AddHttpContextAccessor();
+var userJwtOptions = builder.Configuration.GetSection("UserJwtOptions").Get<JwtOptions>();
+if (userJwtOptions == null)
+{
+    throw new InvalidOperationException("UserJwtOptions not found in configuration");
+}
+builder.Services.AddSingleton(userJwtOptions);
+builder.Services.AddJwtAuthentication("User", userJwtOptions);
+builder.Services.AddAuthorization();
+
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IAuthHeaderProvider, AuthHeaderProvider>();
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddMvc(options => options.EnableEndpointRouting = false)
@@ -51,22 +66,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.MapHealthChecks("/healthcheck");
 app.MapControllers();
+
 app.Run();
-
-
-string GetConnectionString(IConfiguration configuration)
-{
-    const string dbSection = "Todo.Storage:Db";
-    var dbConfig = configuration.GetSection(dbSection);
-    var server = dbConfig.GetValue<string>("Server");
-    var port = dbConfig.GetValue<string>("Port");
-    var database = dbConfig.GetValue<string>("Db");
-    var userId = Environment.GetEnvironmentVariable("TODO_DB_ID");
-    var password = Environment.GetEnvironmentVariable("TODO_DB_PW");
-    var connStr = $"server={server};port={port};user={userId};password={password};database={database};";
-
-    return connStr;
-}

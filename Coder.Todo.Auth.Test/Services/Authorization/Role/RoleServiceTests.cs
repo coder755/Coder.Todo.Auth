@@ -23,11 +23,11 @@ public class RoleServiceTests
     [SetUp]
     public void SetUp()
     {
-        _validRole = new Db.Role { Id = Guid.NewGuid() };
-        _validPermission = new Db.Permission { Id = Guid.NewGuid() };
+        _validRole = new Db.Role { Id = Guid.NewGuid(), Name = "best", Description = "best" };
+        _validPermission = new Db.Permission { Id = Guid.NewGuid(), Name = "admin", Description = "admin" };
         var roles = new List<Db.Role> { _validRole };
         var permissions = new List<Db.Permission> { _validPermission };
-        var grantedPermissions = new List<Db.GrantedPermission>().AsQueryable();
+        var grantedPermissions = new List<GrantedPermission>().AsQueryable();
         _mockAuthContext = new Mock<AuthContext>();
         _mockAuthContext.Setup(c => c.Roles).ReturnsDbSet(roles.AsQueryable());
         _mockAuthContext.Setup(c => c.Permissions).ReturnsDbSet(permissions.AsQueryable());
