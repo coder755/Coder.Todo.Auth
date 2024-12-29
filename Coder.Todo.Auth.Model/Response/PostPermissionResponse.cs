@@ -2,11 +2,5 @@
 
 public class PostPermissionResponse
 {
-    private PermissionDto Permission_ { get; set; } = null!;
-
-    public required PermissionDto Permission
-    {
-        get => Permission_;
-        set => Permission_ = value;
-    }
+    public required PermissionDto Permission { get; init; }
 }
