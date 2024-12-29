@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coder.Todo.Auth.Db.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20241226043210_Init")]
+    [Migration("20241229020154_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -104,13 +104,17 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("binary(32)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("binary(16)");
 
                     b.Property<string>("UserName")
                         .IsRequired()

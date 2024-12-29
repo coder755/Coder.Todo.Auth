@@ -14,8 +14,12 @@ public class User
     public string UserName { get; init; } = null!;
 
     [Required]
-    [Column(TypeName = "varchar(50)")]
-    public string Password { get; init; } = null!;
+    [Column(TypeName = "binary(32)")]
+    public byte[] PasswordHash { get; init; } = null!;
+    
+    [Required]
+    [Column(TypeName = "binary(16)")]
+    public byte[] Salt { get; init; } = null!;
 
     [Required]
     [Column(TypeName = "varchar(50)")]

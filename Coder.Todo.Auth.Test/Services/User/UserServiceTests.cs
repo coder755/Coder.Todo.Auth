@@ -57,7 +57,8 @@ public class UserServiceTests
             () => _userService.CreateUserAsync(new ValidatedUserData
             {
                 Username = "best",
-                Password = "user",
+                PasswordHash = [],
+                Salt = [],
                 Email = "ever",
                 Phone = "123"
             }));
@@ -74,7 +75,8 @@ public class UserServiceTests
             () => _userService.CreateUserAsync(new ValidatedUserData
             {
                 Username = "best",
-                Password = "user",
+                PasswordHash = [],
+                Salt = [],
                 Email = "ever",
                 Phone = "123"
             }));
@@ -91,7 +93,8 @@ public class UserServiceTests
             () => _userService.CreateUserAsync(new ValidatedUserData
             {
                 Username = "best",
-                Password = "user",
+                PasswordHash = [],
+                Salt = [],
                 Email = "ever",
                 Phone = "123"
             }));
@@ -108,7 +111,8 @@ public class UserServiceTests
             () => _userService.CreateUserAsync(new ValidatedUserData
             {
                 Username = "best",
-                Password = "user",
+                PasswordHash = [],
+                Salt = [],
                 Email = "ever",
                 Phone = "123"
             }));

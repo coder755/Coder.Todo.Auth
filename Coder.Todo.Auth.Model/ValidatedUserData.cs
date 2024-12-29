@@ -4,31 +4,38 @@ namespace Coder.Todo.Auth.Model;
 public class ValidatedUserData
 {
     private string Username_ { get; set; } = null!;
-    private string Password_ { get; set; } = null!;
+    private byte[] PasswordHash_ { get; set; } = null!;
+    private byte[] Salt_ { get; set; } = null!;
     private string Email_ { get; set; } = null!;
     private string Phone_ { get; set; } = null!;
     
     public required string Username
     {
         get => Username_;
-        set => Username_ = value;
+        init => Username_ = value;
     }
     
-    public required string Password
+    public required byte[] PasswordHash
     {
-        get => Password_;
-        set => Password_ = value;
+        get => PasswordHash_;
+        init => PasswordHash_ = value;
+    }
+    
+    public required byte[] Salt
+    {
+        get => Salt_;
+        init => Salt_ = value;
     }
     
     public required string Email
     {
         get => Email_;
-        set => Email_ = value;
+        init => Email_ = value;
     }
     
     public required string Phone
     {
         get => Phone_;
-        set => Phone_ = value;
+        init => Phone_ = value;
     }
 }

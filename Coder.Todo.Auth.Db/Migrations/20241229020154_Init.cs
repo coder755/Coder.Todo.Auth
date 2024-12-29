@@ -66,8 +66,8 @@ namespace Coder.Todo.Auth.Db.Migrations
                     Id = table.Column<byte[]>(type: "varbinary(16)", maxLength: 16, nullable: false),
                     UserName = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PasswordHash = table.Column<byte[]>(type: "binary(32)", nullable: false),
+                    Salt = table.Column<byte[]>(type: "binary(16)", nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Phone = table.Column<string>(type: "varchar(50)", nullable: false)

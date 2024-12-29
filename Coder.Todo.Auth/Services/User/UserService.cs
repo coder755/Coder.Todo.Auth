@@ -16,10 +16,12 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             var formattedPassword = UserValidationUtils.ValidatePassword(password);
             var formattedEmail = UserValidationUtils.ValidateEmail(email);
             var formattedPhoneNumber = UserValidationUtils.ValidatePhoneNumber(phone);
+            var salt = PasswordUtils.GenerateSalt();
             return new ValidatedUserData
             {
                 Username = formattedUserName,
-                Password = formattedPassword,
+                PasswordHash = PasswordUtils.HashPassword(formattedPassword, salt),
+                Salt = salt,
                 Email = formattedEmail,
                 Phone = formattedPhoneNumber
             };
@@ -38,7 +40,8 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             {
                 Id = Guid.CreateVersion7(),
                 UserName = validatedUserData.Username,
-                Password = validatedUserData.Password,
+                PasswordHash = validatedUserData.PasswordHash,
+                Salt = validatedUserData.Salt,
                 Email = validatedUserData.Email,
                 Phone = validatedUserData.Phone
             };
@@ -66,7 +69,7 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
             throw new CreateUserException("Unable to save user to database.");
         }
     }
-
+    
     public string CreateAccessToken(Guid userId)
     {
         return "";
