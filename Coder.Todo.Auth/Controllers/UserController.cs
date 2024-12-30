@@ -1,6 +1,6 @@
 ﻿using System.Net.Mime;
 using Coder.Todo.Auth.Model.Dto;
-using Coder.Todo.Auth.Model.Exception.UserValidation;
+using Coder.Todo.Auth.Model.Exception.User;
 using Coder.Todo.Auth.Model.Request;
 using Coder.Todo.Auth.Model.Response;
 using Coder.Todo.Auth.Services.Authorization;
@@ -79,7 +79,7 @@ public class UserController(
             };
             return userDto;
         }
-        catch (UnauthorizedAccessException)
+        catch (UserDoesNotExistsException)
         {
             return new UnauthorizedResult();
         }

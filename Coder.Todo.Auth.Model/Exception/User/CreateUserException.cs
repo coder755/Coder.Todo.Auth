@@ -1,6 +1,6 @@
 ﻿
 
-namespace Coder.Todo.Auth.Model.Exception;
+namespace Coder.Todo.Auth.Model.Exception.User;
 
 public class CreateUserException : System.Exception
 {

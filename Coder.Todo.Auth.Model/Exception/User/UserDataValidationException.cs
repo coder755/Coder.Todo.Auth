@@ -1,4 +1,4 @@
-﻿namespace Coder.Todo.Auth.Model.Exception.UserValidation;
+﻿namespace Coder.Todo.Auth.Model.Exception.User;
 
 public class UserDataValidationException : System.Exception
 {

@@ -1,7 +1,6 @@
 ﻿using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model;
-using Coder.Todo.Auth.Model.Exception;
-using Coder.Todo.Auth.Model.Exception.UserValidation;
+using Coder.Todo.Auth.Model.Exception.User;
 using EntityFramework.Exceptions.Common;
 
 namespace Coder.Todo.Auth.Services.User;
@@ -73,10 +72,9 @@ public class UserService(AuthContext context, ILogger<UserService> logger) : IUs
     public async Task<Db.User> GetUserAsync(Guid userId)
     {
         var user = await context.Users.FindAsync(userId);
-        if (user == null)
-        {
-            throw new UnauthorizedAccessException();
-        }
-        return user;
+        if (user != null) return user;
+        
+        logger.LogError("User with id {UserId} not found.", userId);
+        throw new UserDoesNotExistsException();
     }
 }
