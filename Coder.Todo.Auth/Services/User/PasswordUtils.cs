@@ -8,6 +8,7 @@ public static class PasswordUtils
 {
     private const int PasswordHashSize = 32;
     private const int SaltSize = 16;
+    
     public static byte[] HashPassword(string password,
         byte[] salt,
         int memoryCost = 65536,

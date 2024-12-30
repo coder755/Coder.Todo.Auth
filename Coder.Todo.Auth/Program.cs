@@ -16,6 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug(); // Optional for Debug output
+
 // Add services to the container
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthSwaggerGen();
