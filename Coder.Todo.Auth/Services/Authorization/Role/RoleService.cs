@@ -31,7 +31,7 @@ public class RoleService(
             switch (e.ConstraintName)
             {
                 case AuthContext.RoleNameIndexName:
-                    throw new RoleNameAlreadyExistsException($"Role {roleName} already exists");
+                    throw new RoleNameAlreadyExistsException();
                 default:
                     logger.LogError(e, "Error creating role");
                     throw;

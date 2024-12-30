@@ -26,7 +26,7 @@ public class PermissionService(AuthContext context, ILogger<PermissionService> l
             switch (e.ConstraintName)
             {
                 case AuthContext.PermissionNameIndexName:
-                    throw new PermissionNameAlreadyExistsException($"Permission {permissionName} already exists");
+                    throw new PermissionNameAlreadyExistsException();
                 default:
                     throw;
             }

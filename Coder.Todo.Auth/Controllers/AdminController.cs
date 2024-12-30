@@ -34,9 +34,9 @@ public class AdminController(
                 }
             };
         }
-        catch (RoleNameAlreadyExistsException e)
+        catch (RoleNameAlreadyExistsException)
         {
-            return new BadRequestObjectResult(e.Message);
+            return new BadRequestObjectResult("Role name already exists");
         }
         catch (Exception e)
         {
@@ -61,9 +61,9 @@ public class AdminController(
                 }
             };
         }
-        catch (RoleNameAlreadyExistsException e)
+        catch (PermissionNameAlreadyExistsException)
         {
-            return new BadRequestObjectResult(e.Message);
+            return new BadRequestObjectResult("Permission already exists");
         }
         catch (Exception e)
         {
