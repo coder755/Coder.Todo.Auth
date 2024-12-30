@@ -8,6 +8,7 @@ namespace Coder.Todo.Auth.Services.Authorization.Jwt;
 
 public class JwtService(JwtOptions jwtOptions) : IJwtService
 {
+    private readonly JwtSecurityTokenHandler _tokenHandler = new();
     public string GenerateUserToken(Guid userId)
     {
         var privateKeyPem = File.ReadAllText(jwtOptions.PrivateKeyPath);
@@ -26,18 +27,15 @@ public class JwtService(JwtOptions jwtOptions) : IJwtService
             SigningCredentials = signingCredentials
         };
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        return tokenHandler.WriteToken(token);
+        var token = _tokenHandler.CreateToken(tokenDescriptor);
+        return _tokenHandler.WriteToken(token);
     }
     
     public string? GetSubjectFromToken(string token)
     {
-        var handler = new JwtSecurityTokenHandler();
-
-        if (!handler.CanReadToken(token)) return null;
-        var jwtToken = handler.ReadJwtToken(token);
+        if (!_tokenHandler.CanReadToken(token)) return null;
+        
+        var jwtToken = _tokenHandler.ReadJwtToken(token);
         var subject = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
         return subject;
     }
