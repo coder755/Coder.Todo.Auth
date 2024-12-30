@@ -5,7 +5,7 @@ namespace Coder.Todo.Auth.Model.Request;
 public class GrantPermissionRequest
 {
     [Required]
-    public Guid PermissionId { get; set; }
+    public required string PermissionName { get; set; }
     [Required]
-    public Guid RoleId { get; set; }
+    public required string RoleName { get; set; }
 }

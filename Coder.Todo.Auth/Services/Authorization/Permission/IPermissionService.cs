@@ -3,4 +3,5 @@
 public interface IPermissionService
 {
     Task<Db.Permission> CreatePermissionAsync(string permissionName, string description);
+    Task<Db.Permission?> GetPermissionAsync(string permissionName);
 }

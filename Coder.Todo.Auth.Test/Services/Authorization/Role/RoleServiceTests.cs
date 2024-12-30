@@ -1,9 +1,8 @@
 ﻿using Coder.Todo.Auth.Db;
-using Coder.Todo.Auth.Model.Exception.GrantedPermission;
 using Coder.Todo.Auth.Model.Exception.Permission;
 using Coder.Todo.Auth.Model.Exception.Role;
+using Coder.Todo.Auth.Services.Authorization.Permission;
 using Coder.Todo.Auth.Services.Authorization.Role;
-using EntityFramework.Exceptions.Common;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -14,9 +13,9 @@ public class RoleServiceTests
 {
     private RoleService _roleService;
     private Mock<AuthContext> _mockAuthContext;
-    private Mock<ILogger<RoleService>> _mockLogger;
-    private readonly Guid _nullRoleId = Guid.Empty;
-    private readonly Guid _nullPermissionId = Guid.Empty;
+    private Mock<IPermissionService> _mockPermissionService;
+    private const string NullRoleName = "null";
+    private const string NullPermissionName = "null";
     private Db.Role _validRole;
     private Db.Permission _validPermission;
     
@@ -27,27 +26,28 @@ public class RoleServiceTests
         _validPermission = new Db.Permission { Id = Guid.NewGuid(), Name = "admin", Description = "admin" };
         var roles = new List<Db.Role> { _validRole };
         var permissions = new List<Db.Permission> { _validPermission };
-        var grantedPermissions = new List<GrantedPermission>().AsQueryable();
+        var rolePermissions = new List<RolePermission>().AsQueryable();
         _mockAuthContext = new Mock<AuthContext>();
         _mockAuthContext.Setup(c => c.Roles).ReturnsDbSet(roles.AsQueryable());
         _mockAuthContext.Setup(c => c.Permissions).ReturnsDbSet(permissions.AsQueryable());
-        _mockAuthContext.Setup(c => c.GrantedPermissions).ReturnsDbSet(grantedPermissions);
+        _mockAuthContext.Setup(c => c.RolePermissions).ReturnsDbSet(rolePermissions);
         
         _mockAuthContext
-            .Setup(ac => ac.Roles.FindAsync(It.Is<Guid>(s => s == _validRole.Id)))
+            .Setup(ac => ac.Roles.FindAsync(It.Is<string>(s => s == _validRole.Name)))
             .Returns(new ValueTask<Db.Role?>(_validRole));
         _mockAuthContext
-            .Setup(ac => ac.Roles.FindAsync(It.Is<Guid>(s => s == _nullRoleId)))
+            .Setup(ac => ac.Roles.FindAsync(It.Is<string>(s => s == NullRoleName)))
             .Returns(new ValueTask<Db.Role?>());
         _mockAuthContext
-            .Setup(ac => ac.Permissions.FindAsync(It.Is<Guid>(s => s == _nullPermissionId)))
+            .Setup(ac => ac.Permissions.FindAsync(It.Is<string>(s => s == NullPermissionName)))
             .Returns(new ValueTask<Db.Permission?>());
         _mockAuthContext
             .Setup(ac => ac.Permissions.FindAsync(It.Is<Guid>(s => s == _validPermission.Id)))
             .Returns(new ValueTask<Db.Permission?>(_validPermission));
         
-        _mockLogger = new Mock<ILogger<RoleService>>();
-        _roleService = new RoleService(_mockAuthContext.Object, _mockLogger.Object);
+        _mockPermissionService = new Mock<IPermissionService>();
+        var mockRoleLogger = new Mock<ILogger<RoleService>>();
+        _roleService = new RoleService(_mockAuthContext.Object, _mockPermissionService.Object, mockRoleLogger.Object);
     }
     
     [Test]
@@ -77,9 +77,12 @@ public class RoleServiceTests
     [Test]
     public async Task GrantPermission_GoodData_DoesNotThrow()
     {
+        _mockPermissionService
+            .Setup(ps => ps.GetPermissionAsync(_validPermission.Name))
+            .ReturnsAsync(_validPermission);
         try
         {
-            await _roleService.GrantPermission(_validRole.Id, _validPermission.Id);
+            await _roleService.GrantPermission(_validRole.Name, _validPermission.Name);
         }
         catch (Exception e)
         {
@@ -91,23 +94,45 @@ public class RoleServiceTests
     public void GrantPermission_RoleDoesNotExist_ThrowsRoleDoesNotExistsException()
     {
         Assert.ThrowsAsync<RoleDoesNotExistsException>(
-            () => _roleService.GrantPermission(_nullRoleId, _validPermission.Id));
+            () => _roleService.GrantPermission(NullRoleName, _validPermission.Name));
     }
     
     [Test]
     public void GrantPermission_PermissionDoesNotExist_ThrowsPermissionDoesNotExistsException()
     {
         Assert.ThrowsAsync<PermissionDoesNotExistsException>(
-            () => _roleService.GrantPermission(_validRole.Id, _nullPermissionId));
+            () => _roleService.GrantPermission(_validRole.Name, NullPermissionName));
     }
     
     [Test]
-    public void GrantPermission_ExistingGrantedPermission_ThrowsGrantedPermissionExistsException()
+    public async Task GrantPermission_ExistingRolePermission_DoesNotAddToContext()
     {
+        var permisionList = new List<Db.Permission>
+        {
+            _validPermission
+        };
+        var roleWithPermission = new Db.Role
+        {
+            Id = Guid.NewGuid(),
+            Name = "roleWithPermission",
+            Description = "bestDescription",
+            Permissions = permisionList
+        };
+        var data = new List<Db.Role> { roleWithPermission };
         _mockAuthContext
             .Setup(ac => ac.SaveChangesAsync(CancellationToken.None))
-            .Throws(new UniqueConstraintException());
-        Assert.ThrowsAsync<GrantedPermissionExistsException>(
-            () => _roleService.GrantPermission(_validRole.Id, _validPermission.Id));
+            .ReturnsAsync(1);
+        _mockAuthContext
+            .Setup(ac => ac.Roles)
+            .ReturnsDbSet(data);
+        _mockPermissionService
+            .Setup(ps => ps.GetPermissionAsync(_validPermission.Name))
+            .ReturnsAsync(_validPermission);
+        
+        var role = await _roleService.GrantPermission(roleWithPermission.Name, _validPermission.Name);
+        _mockAuthContext.Verify(
+            authContext => authContext.SaveChangesAsync(It.IsAny<CancellationToken>()),
+            Times.Never);
+        Assert.That(roleWithPermission.Id, Is.EqualTo(role.Id));
     }
 }

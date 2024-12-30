@@ -1,6 +1,7 @@
 using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Exception.Permission;
 using EntityFramework.Exceptions.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coder.Todo.Auth.Services.Authorization.Permission;
 
@@ -33,6 +34,20 @@ public class PermissionService(AuthContext context, ILogger<PermissionService> l
         catch (Exception e)
         {
             logger.LogError(e, "Error creating permission");
+            throw;
+        }
+    }
+
+    public async Task<Db.Permission?> GetPermissionAsync(string permissionName)
+    {
+        try
+        {
+            var permission = await context.Permissions.FirstOrDefaultAsync(p => p.Name == permissionName);
+            return permission;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error getting permission");
             throw;
         }
     }

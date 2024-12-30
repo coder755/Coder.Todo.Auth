@@ -4,11 +4,10 @@ using Microsoft.EntityFrameworkCore;
 namespace Coder.Todo.Auth.Db;
 
 [PrimaryKey(nameof(RoleId), nameof(PermissionId))]
-public class GrantedPermission
+public class RolePermission
 {
     [Required]
-    public Guid PermissionId { get; init; }
-    
+    public required Guid RoleId { get; init; }
     [Required]
-    public Guid RoleId { get; init; }
+    public required Guid PermissionId { get; init; }
 }

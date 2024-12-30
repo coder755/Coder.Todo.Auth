@@ -31,4 +31,8 @@ public class User
     [Required]
     // Gets set by Db in AuthContext in OnModelCreating
     public DateTime CreatedDate { get; init; }
+    
+    // Navigation property for the related UserRoles and UserPermissions
+    public ICollection<UserRole> UserRoles { get; init; } = new List<UserRole>();
+    public ICollection<UserPermission> UserPermissions { get; init; } = new List<UserPermission>();
 }

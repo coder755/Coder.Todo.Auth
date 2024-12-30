@@ -4,6 +4,7 @@ using Coder.Todo.Auth.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coder.Todo.Auth.Db.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20241230022124_RolePermUpdate")]
+    partial class RolePermUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,9 +85,7 @@ namespace Coder.Todo.Auth.Db.Migrations
 
                     b.HasKey("RoleId", "PermissionId");
 
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Coder.Todo.Auth.Db.User", b =>
@@ -164,14 +165,8 @@ namespace Coder.Todo.Auth.Db.Migrations
 
             modelBuilder.Entity("Coder.Todo.Auth.Db.RolePermission", b =>
                 {
-                    b.HasOne("Coder.Todo.Auth.Db.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Coder.Todo.Auth.Db.Role", null)
-                        .WithMany()
+                        .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -193,6 +188,11 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Coder.Todo.Auth.Db.Role", b =>
+                {
+                    b.Navigation("RolePermissions");
                 });
 
             modelBuilder.Entity("Coder.Todo.Auth.Db.User", b =>

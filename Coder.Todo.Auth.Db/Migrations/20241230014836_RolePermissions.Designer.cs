@@ -4,6 +4,7 @@ using Coder.Todo.Auth.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coder.Todo.Auth.Db.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20241230014836_RolePermissions")]
+    partial class RolePermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,9 +85,7 @@ namespace Coder.Todo.Auth.Db.Migrations
 
                     b.HasKey("RoleId", "PermissionId");
 
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Coder.Todo.Auth.Db.User", b =>
@@ -134,72 +135,6 @@ namespace Coder.Todo.Auth.Db.Migrations
                         .HasDatabaseName("IX_Users_UserName");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.UserPermission", b =>
-                {
-                    b.Property<byte[]>("UserId")
-                        .HasColumnType("varbinary(16)");
-
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("UserId", "PermissionId");
-
-                    b.ToTable("UserPermission");
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.UserRole", b =>
-                {
-                    b.Property<byte[]>("UserId")
-                        .HasColumnType("varbinary(16)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.RolePermission", b =>
-                {
-                    b.HasOne("Coder.Todo.Auth.Db.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Coder.Todo.Auth.Db.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.UserPermission", b =>
-                {
-                    b.HasOne("Coder.Todo.Auth.Db.User", null)
-                        .WithMany("UserPermissions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.UserRole", b =>
-                {
-                    b.HasOne("Coder.Todo.Auth.Db.User", null)
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Coder.Todo.Auth.Db.User", b =>
-                {
-                    b.Navigation("UserPermissions");
-
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

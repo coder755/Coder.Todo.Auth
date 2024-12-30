@@ -55,12 +55,51 @@ public class AuthContext : DbContext
             .Property(e => e.CreatedDate)
             .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
         
+        // Configure the 1-to-many relationship with roles and permissions
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.UserRoles)
+            .WithOne()
+            .HasForeignKey(gr => gr.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.UserPermissions)
+            .WithOne()
+            .HasForeignKey(gp => gp.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Need to do the same with User
+        modelBuilder.Entity<Role>()
+            .HasMany(r => r.Permissions)
+            .WithMany()
+            .UsingEntity<RolePermission>(
+                right => right
+                    .HasOne<Permission>()
+                    .WithMany()
+                    .HasForeignKey(rp => rp.PermissionId),
+                left => left
+                    .HasOne<Role>()
+                    .WithMany()
+                    .HasForeignKey(rp => rp.RoleId),
+                join =>
+                {
+                    join.ToTable("RolePermissions");
+                });
+        
         // Guid binary representation for Roles
         modelBuilder
             .Entity<Role>()
             .Property(e => e.Id)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
+        
+        // Ensure role names are always lower case
+        modelBuilder
+            .Entity<Role>()
+            .Property(r => r.Name)
+            .HasConversion(
+                name => name.ToLower(), // Convert to lowercase when saving
+                name => name            // Leave as-is when retrieving
+            );
         
         // Guid binary representation for Permissions
         modelBuilder
@@ -69,14 +108,23 @@ public class AuthContext : DbContext
             .HasConversion<byte[]>()
             .HasMaxLength(16);
         
-        // Guid binary representation for GrantedPermissions
+        // Ensure permission names are always lower case
         modelBuilder
-            .Entity<GrantedPermission>()
+            .Entity<Permission>()
+            .Property(p => p.Name)
+            .HasConversion(
+                name => name.ToLower(), // Convert to lowercase when saving
+                name => name            // Leave as-is when retrieving
+            );
+        
+        // Guid binary representation for RolePermissions
+        modelBuilder
+            .Entity<RolePermission>()
             .Property(e => e.PermissionId)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
         modelBuilder
-            .Entity<GrantedPermission>()
+            .Entity<RolePermission>()
             .Property(e => e.RoleId)
             .HasConversion<byte[]>()
             .HasMaxLength(16);
@@ -90,5 +138,5 @@ public class AuthContext : DbContext
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
-    public virtual DbSet<GrantedPermission> GrantedPermissions { get; set; }
+    public virtual DbSet<RolePermission> RolePermissions { get; set; }
 }

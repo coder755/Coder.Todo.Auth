@@ -1,5 +1,4 @@
 ﻿using System.Net.Mime;
-using Coder.Todo.Auth.Model.Exception.GrantedPermission;
 using Coder.Todo.Auth.Model.Exception.Permission;
 using Coder.Todo.Auth.Model.Exception.Role;
 using Coder.Todo.Auth.Model.Request;
@@ -78,7 +77,7 @@ public class AdminController(
     {
         try
         {
-            await roleService.GrantPermission(req.RoleId, req.PermissionId);
+            await roleService.GrantPermission(req.RoleName, req.PermissionName);
             return new OkResult();
         }
         catch (RoleDoesNotExistsException)
@@ -88,10 +87,6 @@ public class AdminController(
         catch (PermissionDoesNotExistsException)
         {
             return new BadRequestObjectResult("Permission does not exist");
-        }
-        catch (GrantedPermissionExistsException)
-        {
-            return new BadRequestObjectResult("Granted permission already exists");
         }
         catch (Exception e)
         {

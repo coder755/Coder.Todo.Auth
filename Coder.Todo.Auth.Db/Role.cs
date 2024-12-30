@@ -15,4 +15,6 @@ public class Role
     [Required]
     [Column(TypeName = "varchar(50)")]
     public required string Description { get; init; }
+    
+    public ICollection<Permission> Permissions { get; set; } = new List<Permission>();
 }
