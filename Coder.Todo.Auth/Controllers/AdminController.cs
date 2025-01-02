@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using Asp.Versioning;
 using Coder.Todo.Auth.Model.Exception.Permission;
 using Coder.Todo.Auth.Model.Exception.Role;
 using Coder.Todo.Auth.Model.Request;
@@ -10,7 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Coder.Todo.Auth.Controllers;
 
 [ApiController]
-[Route("api/[controller]/v1")]
+[ControllerName("Admin")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
 public class AdminController(
@@ -45,6 +48,29 @@ public class AdminController(
         }
     }
     
+    [HttpPost("role/{roleName}/permission")]
+    public async Task<ActionResult> GrantPermissionAsync([FromRoute] string roleName, [FromBody] GrantPermissionRequest req)
+    {
+        try
+        {
+            await roleService.GrantPermission(roleName, req.PermissionName);
+            return new OkResult();
+        }
+        catch (RoleDoesNotExistsException)
+        {
+            return new BadRequestObjectResult("Role does not exist");
+        }
+        catch (PermissionDoesNotExistsException)
+        {
+            return new BadRequestObjectResult("Permission does not exist");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error GrantPermissionAsync");
+            return new BadRequestObjectResult("Error Granting Permission");
+        }
+    }
+    
     [HttpPost("permission")]
     public async Task<ActionResult<PostPermissionResponse>> PostPermissionAsync([FromBody] PostPermissionRequest req)
     {
@@ -69,29 +95,6 @@ public class AdminController(
         {
             logger.LogError(e, "Error PostPermissionAsync");
             return new BadRequestObjectResult("Error Posting Permission");
-        }
-    }
-
-    [HttpPost("permission/grant")]
-    public async Task<ActionResult> GrantPermissionAsync([FromBody] GrantPermissionRequest req)
-    {
-        try
-        {
-            await roleService.GrantPermission(req.RoleName, req.PermissionName);
-            return new OkResult();
-        }
-        catch (RoleDoesNotExistsException)
-        {
-            return new BadRequestObjectResult("Role does not exist");
-        }
-        catch (PermissionDoesNotExistsException)
-        {
-            return new BadRequestObjectResult("Permission does not exist");
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, "Error GrantPermissionAsync");
-            return new BadRequestObjectResult("Error Granting Permission");
         }
     }
 }

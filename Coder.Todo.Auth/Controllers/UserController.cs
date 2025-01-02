@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+using Asp.Versioning;
 using Coder.Todo.Auth.Model.Dto;
 using Coder.Todo.Auth.Model.Exception.User;
 using Coder.Todo.Auth.Model.Request;
@@ -12,7 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Coder.Todo.Auth.Controllers;
 
 [ApiController]
-[Route("api/[controller]/v1")]
+[ControllerName("User")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
 public class UserController(

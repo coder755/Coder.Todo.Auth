@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Coder.Todo.Auth.Db;
 using Coder.Todo.Auth.Model.Auth;
 using Coder.Todo.Auth.Services.Authorization;
@@ -65,6 +66,21 @@ builder.Services.Configure<RouteOptions>(options =>
 {
     options.LowercaseUrls = true; // Enforce lowercase URLs
     options.LowercaseQueryStrings = false; // Optional: Keep query strings case-insensitive
+});
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0); //same as ApiVersion.Default
+    if (builder.Environment.IsDevelopment())
+    {
+        options.ReportApiVersions = true;
+    }
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
 });
 
 var app = builder.Build();
