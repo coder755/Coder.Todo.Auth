@@ -61,6 +61,11 @@ builder.Services.AddMvc(options => options.EnableEndpointRouting = false)
         options.AllowInputFormatterExceptionMessages = false;
         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
     });
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true; // Enforce lowercase URLs
+    options.LowercaseQueryStrings = false; // Optional: Keep query strings case-insensitive
+});
 
 var app = builder.Build();
 
